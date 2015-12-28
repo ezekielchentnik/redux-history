@@ -21,7 +21,9 @@ const location = history.createLocation(window.location);
 //optional initial state from browser
 const store = configureStore(Object.assign({}, window.__INITIAL_STATE__, {location}));
 
-//const unconnect = connectHistory(store, history);
+const unconnectHistory = connectHistory(store, history);
+
+//unconnectHistory();
 
 ```
 
