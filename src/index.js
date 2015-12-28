@@ -1,20 +1,21 @@
-const CHANGE_LOCATION = 'CHANGE_LOCATION';
+const UPDATE_LOCATION = 'UPDATE_LOCATION';
 import { createLocation } from 'history';
 
 var initialState = createLocation();
 
-export function location(state = initialState, action) {
+export function locationReducer(state = initialState, action) {
+    //needs support for Immutable.js
 
-    if (action.type === CHANGE_LOCATION) {
+    if (action.type === UPDATE_LOCATION) {
         return Object.assign({}, state, action.payload)
     }
     return state;
 
 }
 
-export function changeLocation(location) {
+export function updateLocation(location) {
     return {
-        type: CHANGE_LOCATION,
+        type: UPDATE_LOCATION,
         payload: createLocation(location)
     }
 }
@@ -23,17 +24,19 @@ export function connectHistory(store, history) {
 
     let currentKey;
 
-    function createUniqueKey(location){//needs to account for location.state
+    function createUniqueKey(location){
+      //needs to account for location.state
       return history.createPath(location);
     }
 
     const unlisten = history.listen(nextLocation => {
       
-      const { location } = store.getState();
+      const { location } = store.getState();//needs support for state selection
       let key = createUniqueKey(location);
       currentKey = createUniqueKey(nextLocation);
+
       if (key != currentKey) {
-        store.dispatch(changeLocation(nextLocation));
+        store.dispatch(updateLocation(nextLocation));
       }
         
     });
@@ -44,15 +47,13 @@ export function connectHistory(store, history) {
       let key = createUniqueKey(location);
 
       if (key !== currentKey) {
-
         const method = location.action === 'REPLACE' ? 'replace' : 'push';
         history[method](location);
-        
       }
 
     });
     
-    return function() {
+    return function unconnectHistory() {
       unlisten();
       unsubscribe();
     };

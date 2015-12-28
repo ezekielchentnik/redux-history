@@ -1,6 +1,6 @@
 {
   "name": "redux-history",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Connect history to redux.",
   "main": "lib/index.js",
   "files": [
