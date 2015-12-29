@@ -4,7 +4,6 @@ import { createLocation } from 'history';
 var initialState = createLocation();
 
 export function locationReducer(state = initialState, action) {
-    //needs support for Immutable.js
 
     if (action.type === UPDATE_LOCATION) {
         return Object.assign({}, state, action.payload)
@@ -16,22 +15,21 @@ export function locationReducer(state = initialState, action) {
 export function updateLocation(location) {
     return {
         type: UPDATE_LOCATION,
-        payload: createLocation(location)
+        payload: location
     }
 }
 
-export function connectHistory(store, history) {
+export function connectHistory(history, store) {
 
     let currentKey;
 
     function createUniqueKey(location){
-      //needs to account for location.state
       return history.createPath(location);
     }
 
-    const unlisten = history.listen(nextLocation => {
+    const unsubscribeHistory = history.listen(nextLocation => {
       
-      const { location } = store.getState();//needs support for state selection
+      const { location } = store.getState();
       let key = createUniqueKey(location);
       currentKey = createUniqueKey(nextLocation);
 
@@ -41,7 +39,7 @@ export function connectHistory(store, history) {
         
     });
 
-    const unsubscribe = store.subscribe(() => {
+    const unsubscribeStore = store.subscribe(() => {
 
       const { location } = store.getState();
       let key = createUniqueKey(location);
@@ -54,8 +52,8 @@ export function connectHistory(store, history) {
     });
     
     return function unconnectHistory() {
-      unlisten();
-      unsubscribe();
+      unsubscribeHistory();
+      unsubscribeStore();
     };
 
 }
