@@ -24,7 +24,8 @@ export function connectHistory(history, store) {
     let currentKey;
 
     function createUniqueKey(location){
-      return history.createPath(location);
+      let key = history.createPath(location);
+      return key;
     }
 
     const unsubscribeHistory = history.listen(nextLocation => {
@@ -33,7 +34,7 @@ export function connectHistory(history, store) {
       let key = createUniqueKey(location);
       currentKey = createUniqueKey(nextLocation);
 
-      if (key != currentKey) {
+      if (key !== currentKey) {
         store.dispatch(updateLocation(nextLocation));
       }
         
