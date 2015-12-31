@@ -6,7 +6,7 @@ Connect the [history api](https://github.com/rackt/history) to redux.  Redux His
 ## Installation
 
 ```
-npm install --save redux-history
+npm install --save redux-history history
 ```
 
 To enable Redux History, use `connectHistory()`:
