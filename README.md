@@ -9,7 +9,7 @@ Connect the [history api](https://github.com/rackt/history) to redux.  Redux His
 npm install --save redux-history history
 ```
 
-To enable Redux History, use `connectHistory()`:
+To enable Redux History, use `connectHistory()` inside your main entry point:
 
 ```js
 import React from 'react';
