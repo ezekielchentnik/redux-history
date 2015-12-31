@@ -12,19 +12,31 @@ npm install --save redux-history history
 To enable Redux History, use `connectHistory()`:
 
 ```js
+import React from 'react';
+import { render } from 'react-dom';
+import configureStore from './store/configureStore';
+import Root from './containers/Root';
 import { connectHistory } from 'redux-history'; 
 import { createHistory, useQueries } from 'history';
 
+const store = configureStore();
 const history = useQueries(createHistory)();
- 
-const location = history.createLocation(window.location);
-//optional initial state from browser
-const store = configureStore(Object.assign({}, window.__INITIAL_STATE__, {location}));
-
 const unconnectHistory = connectHistory(history, store);
 
-//unconnectHistory();
+render(
+  <Root store={store} />,
+  document.getElementById('root')
+);
+```
 
+in your root reducer
+```js
+import {combineReducers} from 'redux';
+import { locationReducer } from 'redux-history';
+
+const rootReducer = combineReducers({
+  location: locationReducer
+});
 ```
 
 ## Usage
