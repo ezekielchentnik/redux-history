@@ -1,7 +1,15 @@
-const UPDATE_LOCATION = 'UPDATE_LOCATION';
-import { createLocation } from 'history';
+const UPDATE_LOCATION = '@@history/UPDATE_LOCATION';
 
-var initialState = createLocation();
+const initialState = {
+
+    pathname: null,
+    search: null,
+    hash: null,
+    state: null,
+    action: null,
+    key: null
+
+};
 
 export function locationReducer(state = initialState, action) {
 
@@ -12,7 +20,7 @@ export function locationReducer(state = initialState, action) {
 
 }
 
-export function updateLocation(location) {
+function updateLocation(location) {
     return {
         type: UPDATE_LOCATION,
         payload: location
@@ -28,7 +36,7 @@ export function connectHistory(history, store) {
       return key;
     }
 
-    const unsubscribeHistory = history.listen(nextLocation => {
+    const unsubscribeHistory = history.listen((nextLocation) => {
       
       const { location } = store.getState();
       let key = createUniqueKey(location);
@@ -45,7 +53,7 @@ export function connectHistory(history, store) {
       const { location } = store.getState();
       let key = createUniqueKey(location);
 
-      if (key !== currentKey) {
+      if (key && key !== currentKey) {
         const method = location.action === 'REPLACE' ? 'replace' : 'push';
         history[method](location);
       }
